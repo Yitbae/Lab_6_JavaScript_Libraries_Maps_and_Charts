@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Events</title>
+
+  <style>
+
+    #canvas {
+      border: 1px black solid;
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <p>Drag the mouse on the canvas</p>
+  <canvas id="canvas" height="400" width="400"></canvas>
+
+  <label for="color-Option">Choose a color:</label>
+  <input type="color" id="color-Option" value="black">
+
+  <label for="radius-input">Circle radius:</label>
+  <input type="range" id="radius-input" min="1" max="50" value="10">
+
+  <button id="clear-button">Clear</button>
+
+  <script>
+
+    let canvas = document.querySelector('#canvas')
+    let context = canvas.getContext('2d')
+
+    // Keep track of whether the mouse button has been pressed down or not.
+    // Think of this as whether the user is drawing or not, is their brush on the canvas?
+    let mousedown = false
+
+    canvas.addEventListener('mousedown', function() {
+      mousedown = true
+    })
+
+    canvas.addEventListener('mouseup', function() {
+      mousedown = false
+    })
+
+    // If mouse leaves the canvas then stop drawing
+    canvas.addEventListener('mouseout', function() {
+      mousedown = false
+    })
+
+    const clearButton = document.getElementById("clear-button");
+
+    // event listener to clear button
+    clearButton.addEventListener("click", () => {
+    // to clear the canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    canvas.addEventListener('mousemove', function() {
+      // If the mouse button is not pressed down, do not draw.
+      if (!mousedown) { return }
+
+      // Get the x, y location of the event.
+      let x = event.offsetX
+      let y = event.offsetY
+
+      // select and fill color below.
+      let colorOption = document.querySelector('#color-Option')
+      let color = colorOption.value
+      context.fillStyle = color
+
+      // select radius and draw a circle int the center of the mouse.
+      let radiusInput = document.querySelector('#radius-input')
+      let radius = parseInt(radiusInput.value)
+      context.beginPath()
+      context.arc(x, y, radius, 0, 2 * Math.PI)
+      context.fill()
+    })
+
+  </script>
+
+</body>
+</html>
